@@ -4,23 +4,22 @@ import numpy as np
 import matplotlib.colors as mcolors
 from matplotlib.ticker import MultipleLocator
 
-# # Inicializar PSSE V_36
+# Initialize psse (For running outside PSSE GUI)
 pssepy_PATH = r"C:\Program Files\PTI\PSSE36\36.1\PSSPY311"
 sys.path.append(pssepy_PATH)
 import psse36  # type: ignore
 import psspy  # type: ignore
 psspy.psseinit()
 
-# # Cargar caso de estudio
-#case = r"C:\Users\rbojo\Documents\Ing. Electrica\4to Semestre\Escenarios Tesis\VERANO_MAX.sav"
+# Load study case
 ejem = r"C:\Users\rbojo\Documents\PTI\PSSE36\EXAMPLE\savnw.sav"
 psspy.case(case)
 
-## Obtener información de owners
+# Obtain owners info
 ierr, name_owners = psspy.aownerchar(-1, 1, 'OWNERNAME')
 ierr, num_owners = psspy.aownerint(-1, 1, 'NUMBER')
 
-## Configurar subsistemas por owner
+# Create subsytem by each owner
  for i, owner in enumerate(num_owners[0]):
      ierr = psspy.bsys(i, 1, [115., 230.], 0, [], 0, [], 1, [owner], 0, [])
      if ierr != 0:
@@ -28,10 +27,10 @@ ierr, num_owners = psspy.aownerint(-1, 1, 'NUMBER')
      else:
          print(f"Sistema {i} configurado correctamente para owner {owner}")
 
- # Diccionario para almacenar los datos por owner
+ # Owner data dictionary
  voltajes_owners = {}
 
-# Obtener datos para cada owner
+# Voltage for each bus in each owner
  for i in range(len(name_owners[0])):
      owner = name_owners[0][i]
     
@@ -51,29 +50,30 @@ ierr, num_owners = psspy.aownerint(-1, 1, 'NUMBER')
 
 
 
-# Crear gráfico
+####################################################################################################################
+# Graph
+
 plt.figure(figsize=(6.2, 4.8))
 plt.rcParams['font.family'] = 'Cambria'
 
-# Lista de colores para las zonas
-colors = ['#0072B2', '#D55E00', '#009E73', '#d62728', '#9467bd']  # Puedes ajustar esta lista de colores
+# Colors for the graph
+colors = ['#0072B2', '#D55E00', '#009E73', '#d62728', '#9467bd']  # 
 
-# Linea por zona
 lines_zones = []
 for i, (zona, datos) in enumerate(voltajes_owners.items()):
     line, = plt.plot(datos['nombres'], datos['voltajes'], marker='o', color=colors[i % len(colors)], label=zona)
     lines_zones.append(line)
 
-# Límites de referencia
+# Optional limit references
 lim_inf = plt.axhline(y=0.95, color='#a9a9a9', linestyle='--', label='0.95')
 lim_sup = plt.axhline(y=1.05, color='#a9a9a9', linestyle='--', label='1.05')
 
-# Etiquetas y configuración del eje
-plt.xlabel('Subestación', fontsize=11)
-plt.ylabel('Voltaje (p.u)', fontsize=11)
+# Graph personalization
+plt.xlabel('Bus', fontsize=11)
+plt.ylabel('Voltage (p.u)', fontsize=11)
 plt.xticks(rotation=90, fontsize=8)
 
-# Leyenda de zonas
+# Legend
 legend_zones = plt.legend(
     handles=lines_zones,
     loc='upper center',
@@ -85,7 +85,6 @@ legend_zones = plt.legend(
     borderpad=0.5,
 )
 
-# Texto que simula la leyenda de límites operativos (ESQUINA SUPERIOR DERECHA DENTRO DEL GRÁFICO)
 leyenda_texto = '-- Límite operativo (0.95)\n -- Límite operativo (1.05)'
 plt.text(
     0.85, 0.9, leyenda_texto,
@@ -100,3 +99,4 @@ plt.text(
 plt.tight_layout()
 plt.savefig("voltajes.png", dpi=300, bbox_inches='tight')
 plt.show()
+
