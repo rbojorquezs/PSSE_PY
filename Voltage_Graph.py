@@ -85,7 +85,7 @@ legend_zones = plt.legend(
     borderpad=0.5,
 )
 
-leyenda_texto = '-- Límite operativo (0.95)\n -- Límite operativo (1.05)'
+leyenda_texto = '-- Limit (0.95)\n -- Límit (1.05)'
 plt.text(
     0.85, 0.9, leyenda_texto,
     transform=plt.gca().transAxes,
@@ -97,6 +97,7 @@ plt.text(
 
 
 plt.tight_layout()
-plt.savefig("voltajes.png", dpi=300, bbox_inches='tight')
+plt.savefig("voltajes.png", dpi=600, bbox_inches='tight')
 plt.show()
+
 
