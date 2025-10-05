@@ -1,17 +1,15 @@
 """ 
-Sriopt to generate graph for renewable integration level in a determined .sav file
+Sript to generate graph for renewable integration level in a determined .sav file
 This script retrieves data from the machine information:
 -Gets MW rating of each generator
 -Gets the type of generation: Renewable or Conventional
 -Calculates the renewable integration level
 -Generates a pie chart to visualize the renewable integration level 
- """
 
-# Obtener el numero de generadores en el sistema
-# Ciclo para obtener la potencia MW a la que esta operando cada generador y si es renovable o convencional
-# Calcular el nivel de integracion renovable 
-# Generar un grafico de pastel para visualizar el nivel de integracion renovable
-# Dar un pequeño reporte de los resultados obtenidos en la consola
+It is designed for running inside PSSE GUI.
+
+Matplotlib must be installed for graph generation
+ """
 
 import matplotlib.pyplot as plt
 
@@ -43,4 +41,5 @@ fig, ax = plt.subplots(figsize=(5,5))
 ax.pie(sizes, labels=labels, autopct=lambda pct: f'{pct:.1f}%', startangle=90)
 ax.axis('equal')
 ax.set_title('Renewable Integration Level', fontsize=14)
+
 plt.show()
